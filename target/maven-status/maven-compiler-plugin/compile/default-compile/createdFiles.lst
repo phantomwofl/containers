@@ -1,0 +1,6 @@
+com\nikulin\springnetology\ProfileController.class
+com\nikulin\springnetology\SystemProfile.class
+com\nikulin\springnetology\JavaConfig.class
+com\nikulin\springnetology\ProductionProfile.class
+com\nikulin\springnetology\DevProfile.class
+com\nikulin\springnetology\ConditionalApplication.class
