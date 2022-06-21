@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestClientResponseException;
 import org.testcontainers.containers.GenericContainer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,21 +24,29 @@ class DemoApplicationTests {
 
     @BeforeAll
     public static void setUp() {
-        devapp.start();
-        prodapp.start();
+        try {
+            devapp.start();
+            prodapp.start();
+        } catch (RestClientResponseException | ResourceAccessException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Test
     void contextLoads() {
+        try {
+
         ResponseEntity<String> forEntity = restTemplate.getForEntity("http://localhost:" + devapp.getMappedPort(8080), String.class);
         String expected = "8080";
         String result = forEntity.getBody();
         assertEquals(expected, result);
-        // System.out.println(forEntity.getBody());
 
         ResponseEntity<String> forEntity2 = restTemplate.getForEntity("http://localhost:" + prodapp.getMappedPort(8081), String.class);
         String expected2 = "8081";
         String result2 = forEntity2.getBody();
         assertEquals(expected2, result2);
+        } catch (RestClientResponseException | ResourceAccessException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
